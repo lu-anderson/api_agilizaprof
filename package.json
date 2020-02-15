@@ -1,0 +1,8 @@
+{
+  "name": "api_agiliza",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:lu-anderson/api_agilizaprof.git",
+  "author": "<Luanderson Santos>",
+  "license": "MIT"
+}
