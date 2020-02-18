@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-const UserSchema = mongoose.Schema({
+const User = mongoose.Schema({
 	name: {
 		type: String,
 		require: true,
@@ -33,9 +33,24 @@ const UserSchema = mongoose.Schema({
 		default: Date.now,
 	},
 	schools: [],
-	_classes: [{type: mongoose.Schema.Types.ObjectId, ref: 'Classe'}]
+	_classes: [{type: mongoose.Schema.Types.ObjectId, ref: 'Classe'}],
+	existDataForSaveInRealm: {
+		type: Boolean,
+		default: false
+	},
+	exitsDataForSaveInSigEduca: {
+		type: Boolean,
+		default: false
+	},
+	savedDataFromSigEduca: {
+		type: Boolean,
+		default: false
+	},
+	needUpdate: {
+		type: Boolean,
+		default: false
+	}
 })
 
-const User = mongoose.model('User', UserSchema)
 
-module.exports = User
+module.exports =  mongoose.model('User', User)

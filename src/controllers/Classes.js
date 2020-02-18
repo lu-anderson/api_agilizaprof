@@ -1,0 +1,66 @@
+const Classe = require('../models/Classe')
+const User = require('../models/User')
+const winston = require('winston')
+
+const logger = winston.createLogger({
+    level: 'error',
+    format: winston.format.json(),
+    transports: [
+      new winston.transports.File({ filename: './src/err/error.log', level: 'error', json: true }),
+      new winston.transports.Console()
+    ]
+})
+
+module.exports = {
+    //Apenas o core tem como armazenar turmas, e não precisa estar autenticado para tal
+    //Por isso que é passado no parâmetro o id do usuário.
+    async store(req, res){
+        try {	  
+            const {classes} = req.body 		
+            const user = await User.findById(req.params.userId)
+    
+            await Promise.all(classes.map(async classe => {
+                const currentClasse = new Classe({ ...classe, _user: req.params.userId })			
+                await currentClasse.save()
+                user._classes.push(currentClasse)
+            }))	
+
+            await user.update({
+                $set:{
+                    savedDataFromSigEduca : true
+                }
+            })	
+            await user.save()
+
+            return res.status(200).json({msg: 'Sucess in add new Classes!'})
+        } catch (error) {
+            logger.error({
+                status: 500,
+                message: 'Error in add classes',
+                stack: error.stack,
+                date: Date.now(),                    
+            })
+
+            return res.status(500).json({ error: 'Error in add classes (classes/store)'})
+        }
+    },
+    
+    async index(req, res){
+        try {
+            const classes = await Classe.find({_user: req.userId})
+
+            return res.status(200).json({classes})
+        } catch (error) {
+            logger.error({
+                status: 500,
+                message: 'Error in find classes (classes/index)',
+                stack: error.stack,
+                date: Date.now(),                    
+            })
+
+            return res.status(500).json({error: 'Erro ao buscar todas as turmas!'})
+        }
+    }
+}
+
+

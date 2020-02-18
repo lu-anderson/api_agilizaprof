@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const winston = require('winston');
+const winston = require('winston')
 const {check, validationResult} = require('express-validator')
 
 const logger = winston.createLogger({
@@ -51,13 +51,12 @@ module.exports = {
                 logger.error({
                     status: 400,
                     message: 'Registered User',
-                    stack: error.stack,
+                    stack: {},
                     date: Date.now()
                 })
 
-                return res.status(400).json({"error": "Usuário já cadastrado!"})               
-            }
-                
+                return res.status(400).json({error: "Usuário já cadastrado!"})               
+            }                
             
             const user = await User.create({
                 name,
@@ -72,7 +71,7 @@ module.exports = {
 
             await user.save()           
 
-            return res.status(200).json({"success": "Usuário cadastrado com sucesso!"})
+            return res.status(200).json({success: "Usuário cadastrado com sucesso!"})
         } catch (error) {
             logger.error({
                 status: 500,
@@ -81,7 +80,7 @@ module.exports = {
                 date: Date.now()
             })
 
-            return res.status(500).json({"unexpectedError": "Erro ao salvar usuário!"})            
+            return res.status(500).json({unexpectedError: "Erro ao salvar usuário!"})            
         }
     },
 
