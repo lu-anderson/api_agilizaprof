@@ -4,6 +4,8 @@ const Index = require('./controllers/index')
 const Users = require('./controllers/Users')
 const Session = require('./controllers/Session')
 const Classes = require('./controllers/Classes')
+const Diaries = require('./controllers/Diaries')
+const DiariesOfContents = require('./controllers/DiariesOfContent')
 
 const adminAuth = require('./middlewares/adminAuth')
 const auth = require('./middlewares/auth')
@@ -27,6 +29,12 @@ routes.post('/admin', Session.adminAuth)
 routes.post('/classes/:userId', adminAuth, Classes.store)
 routes.get('/classes', auth, Classes.index)
 
+//Diaries
+routes.post('/diaries', auth, Diaries.store)
+routes.put('/diaries', auth, Diaries.update)
+
+//DiariesOfContents
+routes.post('/diariesOfContents', auth, DiariesOfContents.store)
 
 
 

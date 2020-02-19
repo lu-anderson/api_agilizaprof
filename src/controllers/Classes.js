@@ -13,35 +13,43 @@ const logger = winston.createLogger({
 
 module.exports = {
     //Apenas o core tem como armazenar turmas, e não precisa estar autenticado para tal
-    //Por isso que é passado no parâmetro o id do usuário.
+    //Por isso que é passado no parâmetro o id do usuário.    
     async store(req, res){
-        try {	  
-            const {classes} = req.body 		
+        try {
+            const { classes } = req.body
+
             const user = await User.findById(req.params.userId)
-    
-            await Promise.all(classes.map(async classe => {
-                const currentClasse = new Classe({ ...classe, _user: req.params.userId })			
+
+            if(!classes) throw 'Classes not found'
+
+            await Promise.all(classes.map(async (classe) => {
+                const currentClasse = new Classe({
+                    ...classe,
+                    _user: req.params.userId
+                })
+
                 await currentClasse.save()
+
                 user._classes.push(currentClasse)
-            }))	
+            }))
 
             await user.update({
-                $set:{
-                    savedDataFromSigEduca : true
+                $set: {
+                    savedClasses: true
                 }
-            })	
-            await user.save()
+            })
 
-            return res.status(200).json({msg: 'Sucess in add new Classes!'})
+            await user.save()
+            res.status(201).json({ msg: 'Success in add new Classes!'})
         } catch (error) {
             logger.error({
                 status: 500,
-                message: 'Error in add classes',
+                message: 'Error in add classes (classes/store)',
                 stack: error.stack,
                 date: Date.now(),                    
             })
 
-            return res.status(500).json({ error: 'Error in add classes (classes/store)'})
+            return res.status(500).json({ error: 'Error in add classes'})
         }
     },
     
