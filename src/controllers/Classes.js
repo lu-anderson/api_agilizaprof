@@ -57,7 +57,7 @@ module.exports = {
         try {
             const classes = await Classe.find({_user: req.userId})
 
-            return res.status(200).json({classes})
+            return res.status(200).send(classes)
         } catch (error) {
             logger.error({
                 status: 500,
@@ -68,7 +68,31 @@ module.exports = {
 
             return res.status(500).json({error: 'Erro ao buscar todas as turmas!'})
         }
-    }
-}
+    },
 
+    /*async getWithDataForSaveInSigEduca(req, res){
+        try {
+            const classes = await Classe.find({
+                    "_user": req.params.userId,
+                    "exitsDataForSaveInSigEduca": true
+                },
+                {
+                    "_id": 1
+                }   
+            ) 
+
+            return res.status(200).send(classes)               
+
+        } catch (error) {
+            logger.error({
+                status: 500,
+                message: 'Error in get classes with data for save in SigEduca',
+                stack: error.stack,
+                date: Date.now(),                    
+            })
+
+            return res.status(500).json({ error: 'Error in get classes with data for save in SigEduca'})
+        }
+    }*/
+}
 

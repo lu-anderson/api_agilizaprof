@@ -1,3 +1,7 @@
+
+const status =  "savedInRealm"||"savedInMongo"||"savedInSigEduca",
+
+//método post - recebe esses dados
 const diariesForStore = [
     {
         classId: String,
@@ -6,13 +10,14 @@ const diariesForStore = [
                 date: Date,
                 workload: Number,
                 students: [],
-                status: "saveInMongo"||"saveInSigEduca",
+                status: "savedInMongo"||"savedInSigEduca",
                 finished: Boolean
             }
         ]
     }
 ]
 
+//método post - recebe esses dados
 const diariesOfContentsForStore = [
     {
         classId: String,
@@ -27,6 +32,7 @@ const diariesOfContentsForStore = [
     }
 ]
 
+//método put - recebe esses dados
 const diariesForUpdate = [
     {
         classId: String,
@@ -40,6 +46,7 @@ const diariesForUpdate = [
     }
 ]
 
+//método put - recebe esses dados
 const diariesOfContentForUpdate = [
     {
         classId: String,
@@ -51,4 +58,6 @@ const diariesOfContentForUpdate = [
             }
         ]
     }
-]
+],
+
+const diariesWithStatusSaveInSigEduca

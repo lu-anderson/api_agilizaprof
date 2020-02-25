@@ -18,6 +18,7 @@ routes.get('/',Index.index)
 //Users
 routes.post('/users', Users.validations , Users.store)
 routes.get('/users',adminAuth, Users.index)
+routes.get('/users/withDataForSaveInSigEduca', adminAuth, Users.getWithDataForSaveInSigEduca)
 
 //Session
 routes.post('/auth', Session.auth)
@@ -27,10 +28,15 @@ routes.post('/admin', Session.adminAuth)
 
 //Classes
 routes.post('/classes/:userId', adminAuth, Classes.store)
+//routes.get('/classes/withDataForSaveInSigEduca/:userId', adminAuth, Classes.getWithDataForSaveInSigEduca)
+
 routes.get('/classes', auth, Classes.index)
 
 //Diaries
+routes.get('/diaries/savedInMongo/:userId', adminAuth, Diaries.getWithStatusSavedInMongoDB)
+
 routes.post('/diaries', auth, Diaries.store)
+routes.get('/diaries/saveInSigEduca', auth, Diaries.getWithStatusSaveInSigEduca)
 routes.put('/diaries', auth, Diaries.update)
 
 //DiariesOfContents

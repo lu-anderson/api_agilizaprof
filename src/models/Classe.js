@@ -19,7 +19,7 @@ const Classe = new mongoose.Schema({
     },
     existDataForSaveInRealm: {
 		type: Boolean,
-		default: false
+        default: false,        
 	},
 	exitsDataForSaveInSigEduca: {
 		type: Boolean,
@@ -32,7 +32,10 @@ const Classe = new mongoose.Schema({
     evaluatedInSigEduca: {
         type: Boolean,
         default: false
-    }
+    },
+    
+}, {
+    timestamps: true
 })
 
 module.exports = mongoose.model('Classe', Classe)

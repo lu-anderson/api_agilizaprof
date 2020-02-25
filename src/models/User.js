@@ -27,11 +27,7 @@ const User = mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
-	subscriptionPlan: String,	
-	createdAt: {
-		type: Date,
-		default: Date.now,
-	},
+	subscriptionPlan: String,
 	schools: [],
 	_classes: [{type: mongoose.Schema.Types.ObjectId, ref: 'Classe'}],
 	existDataForSaveInRealm: {
@@ -50,6 +46,8 @@ const User = mongoose.Schema({
 		type: Boolean,
 		default: false
 	}
+}, {
+    timestamps: true
 })
 
 
