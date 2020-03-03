@@ -19,10 +19,7 @@ module.exports = {
             const {diariesForStore} = req.body
 
             let response = {
-                diariesSaved: {
-                    classId: '',
-                    diaries: []
-                },
+                diariesSaved: [],
                 diariesNotSaved: {
                     classId: '',
                     diaries: []
@@ -35,12 +32,22 @@ module.exports = {
 
                     if(!classeInMongo) throw `Class not found`
 
+                    response.diariesSaved.push({
+                        classId: classe.classId,
+                        diaries: []
+                    })
+
                     classe.diaries.map(diary => {
                         const existDiary = classeInMongo.diaries.findIndex(val => val.date === diary.date)
                         if(existDiary === -1){
-                            classeInMongo.diaries.push(diary) 
-                            if( !response.diariesSaved.classId) response.diariesSaved.classId = classe.classId                           
-                            response.diariesSaved.diaries.push(diary.date)
+                            classeInMongo.diaries.push(diary)    
+
+                            const existClasseInResponse = response.diariesSaved
+                                            .findIndex(val => val.classId === classe.classId)
+
+                            response.diariesSaved[existClasseInResponse].diaries.push({
+                                date: diary.date
+                            })                                          
                         }else{
                             if( !response.diariesNotSaved.classId) response.diariesNotSaved.classId = classe.classId
                             response.diariesNotSaved.diaries.push(diary.date)
@@ -51,7 +58,14 @@ module.exports = {
                 })
             )
 
-            if(response.diariesSaved.diaries.length !== 0){
+            let existDiariesSaved = false
+            for (let index = 0; index < response.diariesSaved.length; index++) {
+                if(response.diariesSaved[index].diaries.length !== 0){
+                    existDiariesSaved = true
+                }                
+            }
+
+            if(existDiariesSaved){
                 await User.updateOne({_id: req.userId}, 
                     {
                         $set: {
@@ -60,9 +74,10 @@ module.exports = {
                     }    
                 )
             }
+            setTimeout(() => {
+                return res.status(201).json({msg: response})
+            }, 1000)
             
-
-            return res.status(201).json({msg: response})
         } catch (error) {
             logger.error({
                 status: 500,
@@ -155,7 +170,7 @@ module.exports = {
         }
     },
 
-    async update(req, res){
+    async setWithStatusSavedInSigEduca(req, res){
         try {
             const { diariesForUpdate } = req.body
             
@@ -165,7 +180,7 @@ module.exports = {
                         classe.diaries.map(async (diary) => {
                             await Classe.updateOne({_id: classe.classId, "diaries.date": diary.date}, {
                                 $set: {
-                                    "diaries.$.status": diary.status,
+                                    "diaries.$.status": 'savedInSigEduca',
                                     "diaries.$.finished": diary.finished,
                                     existDataForSaveInRealm: true
                                 }
@@ -180,7 +195,72 @@ module.exports = {
         } catch (error) {
             logger.error({
                 status: 500,
-                message: 'Error in store diaries (diaries/store)',
+                message: 'Error in set With Status Saved In SigEduca (diaries/setWithStatusSavedInSigEduca)',
+                stack: error.stack,
+                date: Date.now(),                    
+            })
+            return res.status(500).json({ error: 'Erro ao atualizar os diários'})
+        }
+    },
+
+    async setFinishedWithTrue(req, res){
+        try {
+            const { diariesForUpdate } = req.body
+            
+            await Promise.all(
+                diariesForUpdate.map(async classe => { 
+                    await Promise.all(
+                        classe.diaries.map(async (diary) => {
+                            await Classe.updateOne({_id: classe.classId, "diaries.date": diary.date}, {
+                                $set: {
+                                    "diaries.$.finished": true,
+                                    existDataForSaveInRealm: false
+                                }
+                            })
+                        })
+                    )
+                })
+            )
+
+            return res.status(200).json({mgs: 'Diários atualizados com sucesso!'})
+
+        } catch (error) {
+            logger.error({
+                status: 500,
+                message: 'Error in set Finished With True (diaries/setFinishedWithTrue)',
+                stack: error.stack,
+                date: Date.now(),                    
+            })
+            return res.status(500).json({ error: 'Erro ao atualizar os diários'})
+        }
+    },
+
+
+    async update(req, res){
+        try {
+            const { diariesForUpdate } = req.body
+            
+            await Promise.all(
+                diariesForUpdate.map(async classe => { 
+                    await Promise.all(
+                        classe.diaries.map(async (diary) => {
+                            await Classe.updateOne({_id: classe.classId, "diaries.date": diary.date}, {
+                                $set: {
+                                    "diaries.$": diary,
+                                    existDataForSaveInRealm: true
+                                }
+                            })
+                        })
+                    )
+                })
+            )
+
+            return res.status(200).json({mgs: 'Diários atualizados com sucesso!'})
+
+        } catch (error) {
+            logger.error({
+                status: 500,
+                message: 'Error in update diaries (diaries/update)',
                 stack: error.stack,
                 date: Date.now(),                    
             })

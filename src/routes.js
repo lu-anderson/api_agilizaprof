@@ -37,7 +37,9 @@ routes.get('/diaries/savedInMongo/:userId', adminAuth, Diaries.getWithStatusSave
 
 routes.post('/diaries', auth, Diaries.store)
 routes.get('/diaries/saveInSigEduca', auth, Diaries.getWithStatusSaveInSigEduca)
-routes.put('/diaries', auth, Diaries.update)
+routes.put('/diaries/saveInSigEduca', adminAuth, Diaries.setWithStatusSavedInSigEduca)
+routes.put('/diaries/setFinishedWithTrue', auth, Diaries.setFinishedWithTrue)
+routes.put('/diaries/update', auth, Diaries.update)
 
 //DiariesOfContents
 routes.post('/diariesOfContents', auth, DiariesOfContents.store)
