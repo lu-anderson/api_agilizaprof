@@ -1,8 +1,7 @@
 module.exports = {
     index(req, res){
         try {
-            res.json({"OK": "Index"})
-            throw 'teste'
+            return res.json({"OK": "Index"})
         } catch (error) {
             console.log(error)
         }        

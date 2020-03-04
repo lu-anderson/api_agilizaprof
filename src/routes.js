@@ -33,17 +33,19 @@ routes.post('/classes/:userId', adminAuth, Classes.store)
 routes.get('/classes', auth, Classes.index)
 
 //Diaries
-routes.get('/diaries/savedInMongo/:userId', adminAuth, Diaries.getWithStatusSavedInMongoDB)
-
 routes.post('/diaries', auth, Diaries.store)
-routes.get('/diaries/saveInSigEduca', auth, Diaries.getWithStatusSaveInSigEduca)
+routes.get('/diaries/savedInMongo/:userId', adminAuth, Diaries.getWithStatusSavedInMongoDB)
 routes.put('/diaries/saveInSigEduca', adminAuth, Diaries.setWithStatusSavedInSigEduca)
+routes.get('/diaries/saveInSigEduca', auth, Diaries.getWithStatusSaveInSigEduca)
 routes.put('/diaries/setFinishedWithTrue', auth, Diaries.setFinishedWithTrue)
-routes.put('/diaries/update', auth, Diaries.update)
+routes.put('/diaries', auth, Diaries.update)
 
 //DiariesOfContents
 routes.post('/diariesOfContents', auth, DiariesOfContents.store)
-
+routes.get('/diariesOfContents/savedInMongo/:userId', adminAuth, DiariesOfContents.getWithStatusSavedInMongoDB)
+routes.put('/diariesOfContents/savedInSigEduca', adminAuth, DiariesOfContents.setWithStatusSavedInSigEduca )
+routes.get('/diariesOfContents/savedInSigEduca', auth, DiariesOfContents.getWithStatusSaveInSigEduca)
+routes.put('/diariesOfContents/setFinishedWithTrue', auth, DiariesOfContents.setFinishedWithTrue)
 
 
 

@@ -49,11 +49,11 @@ module.exports = {
                                 date: diary.date
                             })                                          
                         }else{
+                            //Alterrar
                             if( !response.diariesNotSaved.classId) response.diariesNotSaved.classId = classe.classId
                             response.diariesNotSaved.diaries.push(diary.date)
                         }                  
                     })
-                    classeInMongo.exitsDataForSaveInSigEduca = true
                     await classeInMongo.save()                    
                 })
             )
@@ -124,7 +124,7 @@ module.exports = {
         } catch (error) {
             logger.error({
                 status: 500,
-                message: "Error in get diaries with status 'saveInSigEduca' (diaries/getDiariesWithStatusSaveInSigEduca)",
+                message: "Error in get diaries with status 'saveInSigEduca' (diaries/getWithStatusSaveInSigEduca)",
                 stack: error.stack,
                 date: Date.now(),                    
             })
@@ -181,8 +181,7 @@ module.exports = {
                             await Classe.updateOne({_id: classe.classId, "diaries.date": diary.date}, {
                                 $set: {
                                     "diaries.$.status": 'savedInSigEduca',
-                                    "diaries.$.finished": diary.finished,
-                                    existDataForSaveInRealm: true
+                                    "diaries.$.finished": diary.finished
                                 }
                             })
                         })
@@ -213,8 +212,7 @@ module.exports = {
                         classe.diaries.map(async (diary) => {
                             await Classe.updateOne({_id: classe.classId, "diaries.date": diary.date}, {
                                 $set: {
-                                    "diaries.$.finished": true,
-                                    existDataForSaveInRealm: false
+                                    "diaries.$.finished": true
                                 }
                             })
                         })
@@ -246,8 +244,7 @@ module.exports = {
                         classe.diaries.map(async (diary) => {
                             await Classe.updateOne({_id: classe.classId, "diaries.date": diary.date}, {
                                 $set: {
-                                    "diaries.$": diary,
-                                    existDataForSaveInRealm: true
+                                    "diaries.$": diary
                                 }
                             })
                         })
