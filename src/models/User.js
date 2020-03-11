@@ -30,10 +30,6 @@ const User = mongoose.Schema({
 	subscriptionPlan: String,
 	schools: [],
 	_classes: [{type: mongoose.Schema.Types.ObjectId, ref: 'Classe'}],
-	existDataForSaveInRealm: {
-		type: Boolean,
-		default: false
-	},
 	exitsDataForSaveInSigEduca: {
 		type: Boolean,
 		default: false

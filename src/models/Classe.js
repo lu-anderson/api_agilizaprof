@@ -17,14 +17,6 @@ const Classe = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    existDataForSaveInRealm: {
-		type: Boolean,
-        default: false,        
-	},
-	exitsDataForSaveInSigEduca: {
-		type: Boolean,
-		default: false
-    },
     evaluatedUser: {
         type: Boolean,
         default: false
